@@ -195,9 +195,9 @@ describe Game do
     end
   end
 
-  describe "#check_columns_for_four" do
+  describe "check columns for four" do
     it "returns false if noone has won" do
-      expect(game.check_columns_for_four).to be(false)
+      expect(game.check_board_for_four([board.grid])).to be(false)
     end
 
     it "sets first player to winner if they have four adjacent peices in a column" do
@@ -205,7 +205,7 @@ describe Game do
       game.board.grid[0][1] = "o".red
       game.board.grid[0][2] = "o".red
       game.board.grid[0][3] = "o".red
-      expect(game.check_columns_for_four).to be(true)
+      expect(game.check_board_for_four([board.grid])).to be(true)
       expect(game.winner).to eq(game.first_player)
     end
 
@@ -214,18 +214,18 @@ describe Game do
       game.board.grid[0][1] = "o".blue
       game.board.grid[0][2] = "o".blue
       game.board.grid[0][3] = "o".blue
-      expect(game.check_columns_for_four).to be(true)
+      expect(game.check_board_for_four([board.grid])).to be(true)
       expect(game.winner).to eq(game.second_player)
     end
   end
 
-  describe "#check_rows_for_four" do
+  describe "check rows for four" do
     it "returns false if noone has won" do
       game.board.grid[0][0] = "o".red
       game.board.grid[1][0] = "o".red
       game.board.grid[2][0] = "o".red
       game.board.grid[4][0] = "o".red
-      expect(game.check_rows_for_four).to be(false)
+      expect(game.check_board_for_four([board.grid.transpose])).to be(false)
     end
 
     it "sets first player to winner if they have four adjacent pieces in a row" do
@@ -233,7 +233,7 @@ describe Game do
       game.board.grid[1][0] = "o".red
       game.board.grid[2][0] = "o".red
       game.board.grid[3][0] = "o".red
-      expect(game.check_rows_for_four).to be(true)
+      expect(game.check_board_for_four([board.grid.transpose])).to be(true)
       expect(game.winner).to eq(game.first_player)
     end
 
@@ -242,7 +242,7 @@ describe Game do
       game.board.grid[1][0] = "o".blue
       game.board.grid[2][0] = "o".blue
       game.board.grid[3][0] = "o".blue
-      expect(game.check_rows_for_four).to be(true)
+      expect(game.check_board_for_four([board.grid.transpose])).to be(true)
       expect(game.winner).to eq(game.second_player)
     end
   end
@@ -253,7 +253,7 @@ describe Game do
       game.board.grid[1][0] = "o".red
       game.board.grid[2][0] = "o".red
       game.board.grid[4][0] = "o".red
-      expect(game.check_diagonals_for_four).to be(false)
+      expect(game.check_board_for_four([raw_left_diagonals])).to be(false)
     end
 
     it "sets first player to winner if they have four adjacent pieces in a row" do
@@ -261,7 +261,7 @@ describe Game do
       game.board.grid[1][1] = "o".red
       game.board.grid[2][2] = "o".red
       game.board.grid[3][3] = "o".red
-      expect(game.check_diagonals_for_four).to be(true)
+      expect(game.check_board_for_four([raw_right_diagonals])).to be(true)
       expect(game.winner).to eq(game.first_player)
     end
 
@@ -270,7 +270,7 @@ describe Game do
       game.board.grid[3][2] = "o".blue
       game.board.grid[4][1] = "o".blue
       game.board.grid[5][0] = "o".blue
-      expect(game.check_diagonals_for_four).to be(true)
+      expect(game.check_board_for_four([raw_left_diagonals])).to be(true)
       expect(game.winner).to eq(game.second_player)
     end
   end

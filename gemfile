@@ -1,4 +1,7 @@
 source "https://rubygems.org"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 151f23b843528ac13956761b97e85511b205502e
 gem "rspec"
 gem "colorize"

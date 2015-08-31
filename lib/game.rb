@@ -8,7 +8,7 @@ class Game
     @first_player = Player.new("o".red)
     @second_player = Player.new("o".blue)
     @board = Board.new
-    @turn_count = 0
+    @turn_count = 1
     @winner = nil
     @player_names = [player1, player2]
     @current_player = nil
@@ -18,8 +18,8 @@ class Game
     puts "Welcome to Kennect Four!"
     get_names unless is_rematch
     randomize_turns
-    until someone_wins! || @turn_count == 42
-      show_board
+    until someone_wins! || @turn_count == 43
+      board.print_board
       make_move
       change_turn
       @turn_count += 1
@@ -86,84 +86,26 @@ class Game
     desired_move
   end
 
-  def show_board #prints a heredoc showing the board.
-    puts <<-eos
-   ===============================
-   || #{@board.grid[0][5]} | #{@board.grid[1][5]} | #{@board.grid[2][5]} | #{@board.grid[3][5]} | #{@board.grid[4][5]} | #{@board.grid[5][5]} | #{@board.grid[6][5]} ||
-   -------------------------------
-   || #{@board.grid[0][4]} | #{@board.grid[1][4]} | #{@board.grid[2][4]} | #{@board.grid[3][4]} | #{@board.grid[4][4]} | #{@board.grid[5][4]} | #{@board.grid[6][4]} ||
-   -------------------------------
-   || #{@board.grid[0][3]} | #{@board.grid[1][3]} | #{@board.grid[2][3]} | #{@board.grid[3][3]} | #{@board.grid[4][3]} | #{@board.grid[5][3]} | #{@board.grid[6][3]} ||
-   -------------------------------
-   || #{@board.grid[0][2]} | #{@board.grid[1][2]} | #{@board.grid[2][2]} | #{@board.grid[3][2]} | #{@board.grid[4][2]} | #{@board.grid[5][2]} | #{@board.grid[6][2]} ||
-   -------------------------------
-   || #{@board.grid[0][1]} | #{@board.grid[1][1]} | #{@board.grid[2][1]} | #{@board.grid[3][1]} | #{@board.grid[4][1]} | #{@board.grid[5][1]} | #{@board.grid[6][1]} ||
-   -------------------------------
-   || #{@board.grid[0][0]} | #{@board.grid[1][0]} | #{@board.grid[2][0]} | #{@board.grid[3][0]} | #{@board.grid[4][0]} | #{@board.grid[5][0]} | #{@board.grid[6][0]} ||
-   ===============================
-      1   2   3   4   5   6   7
-    eos
-  end
-
   def change_turn
     @current_player = (@current_player == @first_player ? @second_player : @first_player)
   end
 
   def someone_wins!
-    check_columns_for_four || check_rows_for_four || check_diagonals_for_four
+    lines_list = [board.grid,
+                  board.grid.transpose,
+                  board.raw_right_diagonals,
+                  board.raw_left_diagonals]
+    check_board_for_four(lines_list)
   end
 
-  def check_columns_for_four
-    columns = Array.new
-    @board.grid.each do |column|
-      columns << column.join
+  def check_board_for_four(lines_list)
+    array = Array.new
+    lines_list.each do |lines|
+      lines.each do |line|
+        array << line.join
+      end
     end
-    check_for_four(columns)
-  end
-
-  def check_rows_for_four
-    rows = Array.new
-    @board.grid.transpose.each do |row|
-      rows << row.join
-    end
-    check_for_four(rows)
-  end
-
-  def check_diagonals_for_four
-    check_right_diagonals || check_left_diagonals
-  end
-
-  def check_right_diagonals
-    right_diagonals = Array.new
-    raw_right_diagonals = [[@board.grid[0][2], @board.grid[1][3], @board.grid[2][4], @board.grid[3][5]],
-    [@board.grid[0][1], @board.grid[1][2], @board.grid[2][3], @board.grid[3][4], @board.grid[4][5]],
-    [@board.grid[0][0], @board.grid[1][1], @board.grid[2][2], @board.grid[3][3], @board.grid[4][4], @board.grid[5][5]],
-    [@board.grid[1][0], @board.grid[2][1], @board.grid[3][2], @board.grid[4][3], @board.grid[5][4], @board.grid[6][5]],
-    [@board.grid[1][2], @board.grid[2][3], @board.grid[3][4], @board.grid[4][5]],
-    [@board.grid[2][0], @board.grid[3][1], @board.grid[4][2], @board.grid[5][3], @board.grid[6][4]],
-    [@board.grid[3][0], @board.grid[4][1], @board.grid[5][2], @board.grid[6][3]]]
-
-    raw_right_diagonals.each do |diagonal|
-      right_diagonals << diagonal.join
-    end
-
-    check_for_four(right_diagonals)
-  end
-
-  def check_left_diagonals
-    left_diagonals = Array.new
-    raw_left_diagonals = [[@board.grid[3][0], @board.grid[2][1], @board.grid[1][2], @board.grid[0][3]],
-    [@board.grid[4][0], @board.grid[3][1], @board.grid[2][2], @board.grid[1][3], @board.grid[0][4]],
-    [@board.grid[5][0], @board.grid[4][1], @board.grid[3][2], @board.grid[2][3], @board.grid[1][4], @board.grid[0][5]],
-    [@board.grid[6][0], @board.grid[5][1], @board.grid[4][2], @board.grid[3][3], @board.grid[2][4], @board.grid[1][5]],
-    [@board.grid[6][1], @board.grid[5][2], @board.grid[4][3], @board.grid[3][4], @board.grid[4][5]],
-    [@board.grid[6][2], @board.grid[6][3], @board.grid[6][4], @board.grid[6][5]]]
-
-    raw_left_diagonals.each do |diagonal|
-      left_diagonals << diagonal.join
-    end
-
-    check_for_four(left_diagonals)
+    check_for_four(array)
   end
 
   def check_for_four(columns)
@@ -179,7 +121,7 @@ class Game
   end
 
   def announce_results
-    show_board
+    board.print_board
     if @winner != nil
       puts "\n#{@winner.name} won!  Congrats!"
     else
