@@ -1,7 +1,7 @@
 class Player
   attr_accessor :name, :symbol
-  def initialize(symbol)
-    @name = String.new
+  def initialize(symbol, name)
+    @name = name
     @symbol = symbol
   end
 end
