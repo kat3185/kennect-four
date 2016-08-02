@@ -26,37 +26,37 @@ class Game
   end
 
   def is_rematch
-    @first_player.name != String.new
+    first_player.name != String.new
   end
 
   def get_names
     print "First player, please enter your name: "
-    @first_player.name = get_action
+    first_player.name = get_action
     puts "Excellent!"
     print "Second player, please enter your name: "
-    @second_player.name = get_action
-    while @second_player.name == @first_player.name
+    second_player.name = get_action
+    while second_player.name == first_player.name
       puts "You can't play yourself!  And we all know that no two people have the same name."
       print "Second player, what's your real name? "
-      @second_player.name = get_action
+      second_player.name = get_action
     end
     puts "Excellenter!"
   end
 
   def randomize_turns
-    @current_player = (rand(2) == 1 ? @first_player : @second_player)
+    @current_player = (rand(2) == 1 ? first_player : second_player)
     puts "\nMy binary coin toss has determined that #{@current_player.name} will go first!\n\n"
   end
 
   def make_move
     first_open_space = nil
-    until first_open_space != nil
+    until !first_open_space.nil? # until first_open_space is defined
       print "\n#{@current_player.name}, pick a column to drop your piece on (1-7): "
       column = get_action.to_i
       column = validate_column(column)
       first_open_space = validate_move(column)
     end
-    @board.grid[column][first_open_space] = @current_player.symbol
+    board.grid[column][first_open_space] = @current_player.symbol
   end
 
   def validate_column(column)
@@ -69,7 +69,7 @@ class Game
   end
 
   def validate_move(column)
-    desired_move = @board.grid[column].find_index { |x| x == " " }
+    desired_move = board.grid[column].find_index { |x| x == " " }
     if desired_move == nil
       puts "Oh no, that column is full! Time to try again."
     end
@@ -77,28 +77,24 @@ class Game
   end
 
   def change_turn
-    @current_player = (@current_player == @first_player ? @second_player : @first_player)
+    @current_player = (@current_player == first_player ? second_player : first_player)
   end
 
   def someone_wins!
-    check_for_four(@board.columns) || check_for_four(@board.rows) || check_for_four(@board.diagonals)
+    check_for_four(board.all_lines)
   end
 
   def check_for_four(lines)
     lines.each do |line|
-      @winner = @first_player if line.include?("o".red*4)
-      @winner = @second_player if line.include?("o".blue*4)
+      @winner = first_player if line.include?("o".red*4)
+      @winner = second_player if line.include?("o".blue*4)
     end
     @winner != nil
   end
 
   def announce_results
     board.display
-    if @winner != nil
-      puts "\n#{@winner.name} won!  Congrats!"
-    else
-      puts "\nIt's a tie! |-o-|"
-    end
+    puts @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!" 
   end
 
   def play_again?
@@ -106,7 +102,7 @@ class Game
     rematch = get_action
     if rematch.downcase == "y"
       puts "Let's get ready to rumblllllllle!"
-      rematch = Game.new(@first_player.name, @second_player.name)
+      rematch = Game.new(first_player.name, second_player.name)
       rematch.play
     else
       puts "Bye now! Have a nice life!"

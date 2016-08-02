@@ -18,6 +18,9 @@ class Board
   def diagonals
     grid.diagonals.map { |diagonal| diagonal.join }
   end
+  def all_lines
+    rows + columns + diagonals
+  end
   def full?
     !grid.flatten.include?(" ")
   end
