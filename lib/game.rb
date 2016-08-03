@@ -93,7 +93,7 @@ class Game
   end
 
   def announce_results
-    board.display
+    puts board.display
     puts @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!"
   end
 
