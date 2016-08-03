@@ -1,7 +1,7 @@
 class Board
   attr_accessor :grid
-  def initialize
-    @grid = Array.new(7) { Array.new(6, " ") }
+  def initialize(slot = " ")
+    @grid = Array.new(7) { Array.new(6, slot) }
   end
   def total_spaces
     grid.flatten.count
@@ -21,7 +21,7 @@ class Board
   def all_lines
     rows + columns + diagonals
   end
-  def full?
+  def is_full
     !grid.flatten.include?(" ")
   end
   def display #prints a heredoc showing the board.
@@ -36,6 +36,6 @@ class Board
     end
     printable_board += "===============================\n"
     printable_board += "   1   2   3   4   5   6   7"
-    puts printable_board
+    printable_board
   end
 end

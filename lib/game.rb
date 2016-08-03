@@ -16,8 +16,8 @@ class Game
     puts "Welcome to Kennect Four!"
     get_names unless is_rematch
     randomize_turns
-    until someone_wins! || board.full?
-      board.display
+    until someone_wins! || board.is_full
+      puts board.display
       make_move
       change_turn
     end
@@ -77,7 +77,7 @@ class Game
   end
 
   def change_turn
-    @current_player = (@current_player == first_player ? second_player : first_player)
+    @current_player = @current_player == first_player ? second_player : first_player
   end
 
   def someone_wins!
@@ -94,7 +94,7 @@ class Game
 
   def announce_results
     board.display
-    puts @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!" 
+    puts @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!"
   end
 
   def play_again?
