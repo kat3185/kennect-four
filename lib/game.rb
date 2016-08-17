@@ -4,7 +4,7 @@ require_relative "board"
 require_relative "diagonals"
 
 class Game
-  attr_accessor :first_player, :second_player, :board
+  attr_accessor :first_player, :second_player, :board, :winner
   def initialize(first_player_name = String.new, second_player_name = String.new)
     @first_player = Player.new("o".red, first_player_name)
     @second_player = Player.new("o".blue, second_player_name)
@@ -50,7 +50,7 @@ class Game
 
   def make_move
     first_open_space = nil
-    until !first_open_space.nil? # until first_open_space is defined
+    until !first_open_space.nil?
       print "\n#{@current_player.name}, pick a column to drop your piece on (1-7): "
       column = get_action.to_i
       column = validate_column(column)
