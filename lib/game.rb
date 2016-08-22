@@ -5,12 +5,13 @@ require_relative "diagonals"
 require_relative "slot"
 
 class Game
-  attr_accessor :first_player, :second_player, :board, :winner
+  attr_accessor :first_player, :second_player, :board, :winner, :current_player
   def initialize(first_player_name = String.new, second_player_name = String.new)
     @first_player = Player.new("o".red, first_player_name)
     @second_player = Player.new("o".blue, second_player_name)
     @board = Board.new
     @winner = nil
+    @current_player = randomize_player
   end
 
   def play
@@ -27,6 +28,10 @@ class Game
   end
 
   private
+  def randomize_player
+    (rand(2) == 1 ? first_player : second_player)
+  end
+
   def is_rematch
     first_player.name != String.new
   end
@@ -46,24 +51,23 @@ class Game
   end
 
   def randomize_turns
-    @current_player = (rand(2) == 1 ? first_player : second_player)
-    puts "\nMy binary coin toss has determined that #{@current_player.name} will go first!\n\n"
+    puts "\nMy binary coin toss has determined that #{current_player.name} will go first!\n\n"
   end
 
   def make_move
     first_open_space = nil
     until !first_open_space.nil?
-      print "\n#{@current_player.name}, pick a column to drop your piece on (1-7): "
+      print "\n#{current_player.name}, pick a column to drop your piece on (1-7): "
       column = get_action.to_i
       column = validate_column(column)
       first_open_space = validate_move(column)
     end
-    board.grid[column][first_open_space].content = @current_player.symbol
+    board.grid[column][first_open_space].content = current_player.symbol
   end
 
   def validate_column(column)
     until (1..7).include?(column)
-      puts "#{@current_player.name}, that is not a legal move."
+      puts "#{current_player.name}, that is not a legal move."
       print "Pick a column between 1 and 7 to drop your piece on: "
       column = get_action.to_i
     end
@@ -79,7 +83,7 @@ class Game
   end
 
   def change_turn
-    @current_player = @current_player == first_player ? second_player : first_player
+    self.current_player = current_player == first_player ? second_player : first_player
   end
 
   def someone_wins!
@@ -88,15 +92,15 @@ class Game
 
   def check_for_four(lines)
     lines.each do |line|
-      @winner = first_player if line.include?(first_player.symbol * 4)
-      @winner = second_player if line.include?(second_player.symbol * 4)
+      self.winner = first_player if line.include?(first_player.symbol * 4)
+      self.winner = second_player if line.include?(second_player.symbol * 4)
     end
-    !@winner.nil?
+    !winner.nil?
   end
 
   def formatted_results
     results = board.display + "\n"
-    results += @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!"
+    results += winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{winner.name} won!  Congrats!"
   end
 
   def play_again?
