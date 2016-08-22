@@ -1,7 +1,7 @@
 class Board
   attr_accessor :grid
-  def initialize(slot = nil)
-    @grid = Array.new(7) { Array.new(6) { slot || Slot.new } }
+  def initialize
+    @grid = Array.new(7) { Array.new(6) { Slot.new } }
   end
 
   def printable_grid
@@ -16,7 +16,7 @@ class Board
     !grid.flatten.any? { |slot| !slot.is_taken? }
   end
 
-  def display #prints a heredoc showing the board.
+  def display #constructs a heredoc showing the board.
     printable_board = "===============================\n"
     printable_grid.each do |row|
       printable_row = "||"

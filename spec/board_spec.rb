@@ -2,6 +2,14 @@ require_relative 'spec_helper'
 
 class Board
   public :rows, :columns, :diagonals
+
+  def fill_board_with(content)
+    grid.each do |column|
+      column.each do |slot|
+        slot.content = content
+      end
+    end
+  end
 end
 
 describe Board do
@@ -39,11 +47,13 @@ describe Board do
     end
   end
   describe "#is_full" do
-    let(:full_board) { Board.new(Slot.new("o")) }
+    let(:full_board) { Board.new }
     it "returns false if the board has any empty spaces left" do
+      full_board.fill_board_with("o")
       expect(board.is_full).to be(false)
     end
     it "returns true if the board has no empty spaces left" do
+      full_board.fill_board_with("o")
       expect(full_board.is_full).to be(true)
     end
   end

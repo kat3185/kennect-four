@@ -22,7 +22,7 @@ class Game
       make_move
       change_turn
     end
-    announce_results
+    puts formatted_results
     play_again?
   end
 
@@ -91,12 +91,12 @@ class Game
       @winner = first_player if line.include?(first_player.symbol * 4)
       @winner = second_player if line.include?(second_player.symbol * 4)
     end
-    @winner != nil
+    !@winner.nil?
   end
 
-  def announce_results
-    puts board.display
-    puts @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!"
+  def formatted_results
+    results = board.display + "\n"
+    results += @winner.nil? ? "\nIt's a tie! |-o-|" : "\n#{@winner.name} won!  Congrats!"
   end
 
   def play_again?
