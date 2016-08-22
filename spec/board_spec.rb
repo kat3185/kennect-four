@@ -8,11 +8,6 @@ describe Board do
       expect(board.grid.first.length).to eq(6)
     end
   end
-  describe "#total_spaces" do
-    it "returns the total number of spaces on the board" do
-      expect(board.total_spaces).to eq(42)
-    end
-  end
   describe "#printable_grid" do
     it "returns a 6 by 7 two dimentional array" do
       expect(board.printable_grid.length).to eq(6)

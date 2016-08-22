@@ -2,6 +2,7 @@ require "colorize"
 require_relative "player"
 require_relative "board"
 require_relative "diagonals"
+require_relative "slot"
 
 class Game
   attr_accessor :first_player, :second_player, :board, :winner
@@ -56,7 +57,7 @@ class Game
       column = validate_column(column)
       first_open_space = validate_move(column)
     end
-    board.grid[column][first_open_space] = @current_player.symbol
+    board.grid[column][first_open_space].content = @current_player.symbol
   end
 
   def validate_column(column)
@@ -69,7 +70,7 @@ class Game
   end
 
   def validate_move(column)
-    desired_move = board.grid[column].find_index { |x| x == " " }
+    desired_move = board.grid[column].find_index { |x| x.is_taken? }
     if desired_move == nil
       puts "Oh no, that column is full! Time to try again."
     end
@@ -86,8 +87,8 @@ class Game
 
   def check_for_four(lines)
     lines.each do |line|
-      @winner = first_player if line.include?("o".red*4)
-      @winner = second_player if line.include?("o".blue*4)
+      @winner = first_player if line.include?(first_player.symbol * 4)
+      @winner = second_player if line.include?(second_player.symbol * 4)
     end
     @winner != nil
   end
