@@ -13,7 +13,7 @@ class Board
   end
 
   def is_full
-    !grid.flatten.any? { |slot| slot.is_taken? }
+    !grid.flatten.any? { |slot| !slot.is_taken? }
   end
 
   def display #prints a heredoc showing the board.

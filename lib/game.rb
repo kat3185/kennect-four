@@ -71,7 +71,7 @@ class Game
   end
 
   def validate_move(column)
-    desired_move = board.grid[column].find_index { |x| x.is_taken? }
+    desired_move = board.grid[column].find_index { |x| !x.is_taken? }
     if desired_move == nil
       puts "Oh no, that column is full! Time to try again."
     end

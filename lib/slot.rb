@@ -5,6 +5,6 @@ class Slot
   end
 
   def is_taken?
-    content == " "
+    !(content == " ")
   end
 end
