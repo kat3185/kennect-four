@@ -26,6 +26,7 @@ class Game
     play_again?
   end
 
+  private
   def is_rematch
     first_player.name != String.new
   end

@@ -1,7 +1,7 @@
 class Board
   attr_accessor :grid
-  def initialize
-    @grid = Array.new(7) { Array.new(6) { Slot.new } }
+  def initialize(slot = nil)
+    @grid = Array.new(7) { Array.new(6) { slot || Slot.new } }
   end
 
   def printable_grid

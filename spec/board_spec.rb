@@ -1,5 +1,9 @@
 require_relative 'spec_helper'
 
+class Board
+  public :rows, :columns, :diagonals
+end
+
 describe Board do
   let!(:board) { Board.new }
   describe "#initialize" do
@@ -35,7 +39,7 @@ describe Board do
     end
   end
   describe "#is_full" do
-    let(:full_board) { Board.new("o") }
+    let(:full_board) { Board.new(Slot.new("o")) }
     it "returns false if the board has any empty spaces left" do
       expect(board.is_full).to be(false)
     end
